@@ -1,0 +1,27 @@
+# Hugo build output
+/public/
+/resources/_gen/
+/.hugo_build.lock
+
+# Temporary files
+.DS_Store
+Thumbs.db
+
+# IDE/Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+ehthumbs.db
+Desktop.ini
+
+# Node modules (if using npm/yarn for assets)
+node_modules/
+
+# Local development
+.env
+.env.local

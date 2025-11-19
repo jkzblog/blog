@@ -18,66 +18,68 @@
 ## Repository Overview
 
 ### Project Type
-This is a blog repository. Once initialized, it may use one of the following frameworks:
-- **Static Site Generators:** Hugo, Jekyll, Eleventy, Astro
-- **React-based:** Next.js, Gatsby
-- **Vue-based:** VuePress, Nuxt Content
-- **Other:** Custom implementation
+This is a **Hugo static site blog** using the **Bear Blog theme**.
+
+- **Framework:** Hugo v0.123.7+extended
+- **Theme:** [hugo-bearblog](https://github.com/janraasch/hugo-bearblog) by Jan Raasch
+- **Philosophy:** Minimal, fast, no-nonsense blogging
 
 ### Current State
-- **Status:** Empty repository (no commits yet)
+- **Status:** Initialized and configured
 - **Branch:** `claude/claude-md-mi6mmw2nw73ux1cy-01TMfysXMWSVJppY1fmV7Wpk`
 - **Remote:** http://local_proxy@127.0.0.1:35499/git/jkzblog/blog
+- **Build System:** Hugo static site generator
+- **Theme Location:** `themes/hugo-bearblog` (git submodule)
 
 ---
 
 ## Codebase Structure
 
-### Expected Directory Structure
+### Actual Directory Structure
 
-Once the blog is initialized, expect a structure similar to one of these patterns:
+This blog uses Hugo with the following structure:
 
-#### Hugo Structure
+#### Current Hugo Structure
 ```
 .
 ├── archetypes/          # Content templates
+├── assets/              # Asset files (processed by Hugo Pipes)
 ├── content/             # Blog posts and pages (Markdown)
+│   ├── _index.md       # Home page content
+│   ├── about.md        # About page
+│   └── blog/           # Blog posts directory
+│       ├── _index.md   # Blog section index
+│       └── *.md        # Individual blog posts
 ├── data/                # Data files (JSON, YAML, TOML)
-├── layouts/             # HTML templates
+├── i18n/                # Internationalization files
+├── layouts/             # Custom HTML templates (override theme)
 ├── static/              # Static assets (images, CSS, JS)
 ├── themes/              # Hugo themes
-├── config.toml          # Site configuration
+│   └── hugo-bearblog/  # Bear Blog theme (git submodule)
+├── .gitignore           # Git ignore file
+├── CLAUDE.md            # This file
+├── hugo.toml            # Site configuration
 └── public/              # Generated site (ignored in git)
 ```
 
-#### Jekyll Structure
-```
-.
-├── _posts/              # Blog posts (YYYY-MM-DD-title.md)
-├── _drafts/             # Draft posts
-├── _layouts/            # HTML templates
-├── _includes/           # Reusable components
-├── _data/               # Data files
-├── _sass/               # Sass partials
-├── assets/              # CSS, JS, images
-├── _config.yml          # Site configuration
-└── _site/               # Generated site (ignored in git)
-```
+### Key Files and Directories
 
-#### Next.js Blog Structure
-```
-.
-├── components/          # React components
-├── pages/               # Routes and pages
-│   ├── posts/          # Blog post pages
-│   └── api/            # API routes
-├── public/              # Static files
-├── styles/              # CSS/SCSS files
-├── lib/                 # Utility functions
-├── content/             # Markdown content
-├── package.json         # Dependencies
-└── next.config.js       # Next.js configuration
-```
+#### Configuration
+- **`hugo.toml`**: Main site configuration (title, author, theme, permalinks, etc.)
+- **`.gitignore`**: Excludes `public/`, `resources/`, and other generated files
+
+#### Content
+- **`content/_index.md`**: Home page content (with frontmatter)
+- **`content/blog/`**: Blog posts directory
+- **`content/about.md`**: About page
+- All content files use TOML frontmatter (`+++` delimiters)
+
+#### Theme
+- **`themes/hugo-bearblog/`**: Git submodule containing the Bear Blog theme
+- Theme can be customized by adding files to `layouts/partials/` to override theme defaults
+
+#### Build Output
+- **`public/`**: Generated static site (ignored in git, created on build)
 
 ---
 
@@ -127,27 +129,37 @@ Once the blog is initialized, expect a structure similar to one of these pattern
 
 ### Build & Deployment
 
-#### Common Commands (Update based on actual framework)
+#### Hugo Commands
 
-**Hugo:**
+This blog uses Hugo. Here are the essential commands:
+
+**Development:**
 ```bash
 hugo server -D          # Development server with drafts
+hugo server             # Development server (published content only)
+hugo server --bind 0.0.0.0 --baseURL http://yourip:1313  # Serve on network
+```
+
+**Building:**
+```bash
 hugo                    # Build for production
-hugo new posts/title.md # Create new post
+hugo --gc --minify      # Build with garbage collection and minification
+hugo --buildDrafts      # Build including draft posts
 ```
 
-**Jekyll:**
+**Creating Content:**
 ```bash
-bundle exec jekyll serve      # Development server
-bundle exec jekyll build      # Build for production
+hugo new blog/my-post.md     # Create new blog post
+hugo new about.md            # Create new page
+hugo new blog/_index.md      # Create blog section index
 ```
 
-**Next.js:**
+**Other Useful Commands:**
 ```bash
-npm run dev             # Development server
-npm run build           # Production build
-npm run start           # Start production server
-npm run lint            # Run linter
+hugo list drafts        # List all draft posts
+hugo list future        # List posts with future publish dates
+hugo list expired       # List expired posts
+hugo version            # Show Hugo version
 ```
 
 #### Testing
@@ -164,39 +176,41 @@ npm run lint            # Run linter
 ### Content Management
 
 #### Blog Post Frontmatter
-Typical frontmatter structure for blog posts:
+This Hugo Bear Blog uses **TOML frontmatter** (with `+++` delimiters):
 
-**Hugo/Jekyll:**
-```yaml
----
-title: "Post Title"
-date: 2025-11-19
-draft: false
-tags: ["tag1", "tag2"]
-categories: ["category"]
-author: "Author Name"
-description: "Brief description for SEO"
-image: "/images/featured.jpg"
----
+**Blog Post:**
+```toml
++++
+title = "Post Title"
+date = 2025-11-19
+draft = false
++++
 ```
 
-**Next.js (with MDX):**
-```yaml
----
-title: 'Post Title'
-date: '2025-11-19'
-tags: ['tag1', 'tag2']
-excerpt: 'Brief description'
-coverImage: '/images/featured.jpg'
----
+**Page with Menu:**
+```toml
++++
+title = "About"
+menu = "main"
+weight = 3
++++
 ```
+
+**Common Frontmatter Fields:**
+- `title`: Post or page title (required)
+- `date`: Publication date in YYYY-MM-DD format
+- `draft`: Set to `true` for drafts (won't appear unless using `-D` flag)
+- `menu`: Add to main menu (use `"main"`)
+- `weight`: Order in menu (lower numbers appear first)
+- `description`: Meta description for SEO
+- `tags`: Array of tags (Bear Blog theme disables taxonomies by default)
+- `slug`: Custom URL slug (optional)
 
 #### File Naming
 - **Blog posts:** Use kebab-case: `my-blog-post-title.md`
-- **With dates:** `YYYY-MM-DD-title.md` (Jekyll convention)
-- **Components:** PascalCase for React/Vue: `BlogPost.jsx`
-- **Utilities:** camelCase: `formatDate.js`
-- **Styles:** kebab-case: `blog-post.css`
+- **Pages:** Use kebab-case: `about.md`, `contact.md`
+- **Section indexes:** Use `_index.md` (e.g., `blog/_index.md`)
+- **No dates in filenames:** Hugo uses frontmatter `date` field instead
 
 ### Code Style
 
@@ -207,26 +221,20 @@ coverImage: '/images/featured.jpg'
 - Use relative links for internal content
 - Keep line length reasonable (80-100 characters when possible)
 
-#### JavaScript/TypeScript
-- Use consistent quotes (prefer single quotes for JS, as configured)
-- 2-space or 4-space indentation (match existing code)
-- Semicolons: use consistently (follow existing convention)
-- Use modern ES6+ features
-- Prefer `const` over `let`, avoid `var`
-
-#### CSS/SCSS
-- Use BEM methodology or CSS modules
-- Mobile-first responsive design
-- Organize properties logically (positioning, box model, typography, visual)
-- Use CSS custom properties (variables) for theming
+#### HTML Templates (if customizing)
+- Follow Go template syntax: `{{ .Title }}`, `{{ range .Pages }}`
+- Place custom templates in `layouts/` to override theme defaults
+- Use `layouts/partials/custom_head.html` for custom CSS/JS
+- Keep templates minimal to maintain Bear Blog's performance
 
 ### Asset Management
 
 #### Images
-- **Location:** `/static/images/` (Hugo), `/public/images/` (Next.js), `/assets/images/` (Jekyll)
+- **Location:** `/static/images/` (served at `/images/` in built site)
 - **Optimization:** Compress images before committing
 - **Naming:** Descriptive kebab-case: `machine-learning-diagram.png`
-- **Formats:** Use WebP with fallbacks when possible
+- **Usage in posts:** `![Alt text](/images/my-image.png)`
+- **Favicon:** Place in `/static/images/favicon.png` and configure in `hugo.toml`
 
 #### Static Files
 - Keep static assets organized in subdirectories
@@ -241,25 +249,35 @@ coverImage: '/images/featured.jpg'
 
 1. **Create the file:**
    ```bash
-   # Hugo
-   hugo new posts/my-new-post.md
-
-   # Jekyll (manual)
-   touch _posts/2025-11-19-my-new-post.md
-
-   # Next.js (manual)
-   touch content/posts/my-new-post.md
+   hugo new blog/my-new-post.md
    ```
+   This creates `content/blog/my-new-post.md` with default frontmatter.
 
-2. **Add frontmatter and content**
+2. **Edit the frontmatter and content:**
+   ```markdown
+   +++
+   title = "My New Blog Post"
+   date = 2025-11-19
+   draft = false
+   +++
+
+   Your content goes here...
+   ```
 
 3. **Preview locally:**
    ```bash
-   # Start dev server (framework-specific)
-   npm run dev  # or hugo server, or bundle exec jekyll serve
+   hugo server -D  # Include drafts
+   # or
+   hugo server     # Published posts only
+   ```
+   Visit http://localhost:1313 in your browser.
+
+4. **Build to verify:**
+   ```bash
+   hugo --gc --minify
    ```
 
-4. **Commit and push:**
+5. **Commit and push:**
    ```bash
    git add .
    git commit -m "content: add post about [topic]"
@@ -268,45 +286,79 @@ coverImage: '/images/featured.jpg'
 
 ### Updating Site Configuration
 
-1. **Locate config file:** `config.toml`, `config.yml`, `next.config.js`, etc.
-2. **Make changes** following existing patterns
-3. **Test thoroughly** - config changes can break builds
-4. **Document changes** in commit message
-5. **Commit:** `git commit -m "config: update site title and description"`
+1. **Edit `hugo.toml`:**
+   - Update `title`, `author`, `description`, etc.
+   - Modify `[params]` section for theme settings
+   - Adjust `[permalinks]` for URL structure
 
-### Adding a New Feature/Component
+2. **Test thoroughly:**
+   ```bash
+   hugo server
+   ```
+   Config changes take effect immediately (server auto-reloads)
 
-1. **Plan the change** - consider impact on existing code
-2. **Create component files** in appropriate directory
-3. **Write tests** if applicable
-4. **Update documentation** if needed
-5. **Test locally** thoroughly
-6. **Commit with descriptive message**
+3. **Common changes:**
+   - Site title: `title = "New Title"`
+   - Author: `author = "Your Name"`
+   - Description: `description = "New description"`
+   - Enable post navigator: `enablePostNavigator = true`
+
+4. **Commit changes:**
+   ```bash
+   git commit -m "config: update site title and description"
+   ```
+
+### Customizing the Theme
+
+The Bear Blog theme can be customized without modifying theme files:
+
+1. **Custom CSS:**
+   - Create `layouts/partials/custom_head.html`
+   - Add inline styles or link to custom CSS:
+   ```html
+   <style>
+     body { font-family: 'Your Font', sans-serif; }
+   </style>
+   ```
+
+2. **Override templates:**
+   - Copy template from `themes/hugo-bearblog/layouts/` to `layouts/`
+   - Modify your copy (your version takes precedence)
+
+3. **Add favicon:**
+   - Place image in `static/images/favicon.png`
+   - Update `hugo.toml`: `favicon = "images/favicon.png"`
 
 ### Troubleshooting Build Issues
 
-1. **Check dependencies:**
+1. **Hugo build fails:**
    ```bash
-   npm install  # or bundle install for Jekyll
+   hugo --verbose  # Run with verbose output
+   hugo --debug    # Run with debug output
    ```
 
-2. **Clear caches:**
+2. **Clear Hugo cache:**
    ```bash
-   # Next.js
-   rm -rf .next
-
-   # Hugo
-   hugo --gc
-
-   # Jekyll
-   bundle exec jekyll clean
+   hugo --gc       # Garbage collection
+   rm -rf public/  # Remove build output
+   rm -rf resources/_gen/  # Remove generated resources
    ```
 
-3. **Verify configuration** files are valid (YAML/TOML/JSON syntax)
+3. **Theme not found:**
+   ```bash
+   # Ensure theme submodule is initialized
+   git submodule update --init --recursive
+   ```
 
-4. **Check for broken links** or missing files
+4. **Verify configuration:**
+   - Check `hugo.toml` syntax (TOML format)
+   - Ensure `theme = 'hugo-bearblog'` is set
+   - Verify content frontmatter uses `+++` delimiters
 
-5. **Review error messages** carefully - they usually point to the issue
+5. **Check for broken links or missing files:**
+   ```bash
+   hugo --printPathWarnings
+   ```
 
 ---
 
@@ -398,20 +450,20 @@ git log --oneline -10
 
 #### Build and Test
 ```bash
-# Install dependencies
-npm install  # or yarn, pnpm, bundle install
+# Hugo has no dependencies to install (static binary)
 
 # Run development server
-npm run dev
+hugo server -D
 
 # Build for production
-npm run build
+hugo --gc --minify
 
-# Run tests
-npm test
+# Check for issues
+hugo --printPathWarnings
 
-# Run linter
-npm run lint
+# List content
+hugo list drafts
+hugo list future
 ```
 
 ### Task Management
@@ -477,43 +529,53 @@ Use the TodoWrite tool to:
 
 ---
 
-## Framework-Specific Notes
+## Hugo Bear Blog Specific Notes
 
-### Hugo
-- **Content Organization:** Use page bundles for resources
-- **Shortcodes:** Create reusable content snippets
-- **Taxonomies:** Use tags and categories effectively
-- **Themes:** Prefer theme components over full theme overrides
+### Theme Philosophy
+- **Minimalism:** Keep pages tiny (~5kb) and fast
+- **No JavaScript required:** Pure HTML/CSS
+- **SEO optimized:** robots.txt, sitemap, meta tags included
+- **Dark mode:** Automatic based on user's system preference
+- **Accessibility:** Clean semantic HTML
 
-### Jekyll
-- **Collections:** Use for non-post content types
-- **Plugins:** Check `_config.yml` for enabled plugins
-- **Liquid Templates:** Learn basic Liquid syntax
-- **Data Files:** Use `_data` for structured content
+### Hugo Features Used
+- **Permalinks:** Clean URLs without dates (`/slug/` instead of `/blog/2025/11/19/slug/`)
+- **Taxonomies disabled:** Bear Blog theme disables tags/categories for simplicity
+- **Markdown rendering:** Uses Chroma for syntax highlighting
+- **Robots.txt:** Auto-generated for SEO
 
-### Next.js
-- **SSG vs SSR:** Prefer Static Site Generation for blog posts
-- **Image Optimization:** Use `next/image` component
-- **MDX:** Combine Markdown with React components
-- **API Routes:** Use sparingly for blog functionality
+### Content Organization
+- **Flat structure:** Posts in `content/blog/*.md`
+- **No categories/tags:** Keep it simple (disabled by default)
+- **Menu system:** Use frontmatter `menu` and `weight` fields
+- **Section pages:** Use `_index.md` for section landing pages
 
-### Gatsby
-- **GraphQL:** Use for querying content and metadata
-- **Plugins:** Check `gatsby-config.js` for plugins
-- **Source Plugins:** Understand content sources
-- **Gatsby Images:** Use for optimized images
+### Performance Tips
+- Keep markdown files focused and concise
+- Optimize images before adding to `static/`
+- Use `hugo --gc --minify` for production builds
+- Avoid heavy customizations that add JavaScript
+
+### Customization Guidelines
+- Use `layouts/partials/custom_head.html` for custom CSS
+- Override specific templates by copying to `layouts/`
+- Keep customizations minimal to maintain performance
+- Test mobile and desktop views
+- Verify dark mode styling if customizing CSS
 
 ---
 
 ## Additional Resources
 
 ### Documentation Links
-Update these links based on the actual framework in use:
 
-- Framework Documentation: [To be added]
-- Theme Documentation: [To be added]
-- Hosting Platform: [To be added]
-- Style Guide: [To be added]
+- **Hugo Documentation:** https://gohugo.io/documentation/
+- **Hugo Bear Blog Theme:** https://github.com/janraasch/hugo-bearblog
+- **Bear Blog (inspiration):** https://bearblog.dev/
+- **Hugo Quick Start:** https://gohugo.io/getting-started/quick-start/
+- **Hugo Content Management:** https://gohugo.io/content-management/
+- **Hugo Template Docs:** https://gohugo.io/templates/
+- **Markdown Guide:** https://www.markdownguide.org/
 
 ### Project-Specific Notes
 Add project-specific information here as the project evolves:
@@ -530,7 +592,14 @@ Add project-specific information here as the project evolves:
 
 Track major updates to this CLAUDE.md file:
 
-### 2025-11-19
+### 2025-11-19 (Update 2)
+- Updated with Hugo Bear Blog specific information
+- Added Hugo commands, workflows, and conventions
+- Removed generic framework sections
+- Added Hugo-specific troubleshooting
+- Documented current project structure
+
+### 2025-11-19 (Initial)
 - Initial creation of CLAUDE.md
 - Added comprehensive structure and guidelines
 - Template ready for blog project initialization
