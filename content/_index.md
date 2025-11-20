@@ -31,4 +31,4 @@ Bear Blog is a philosophy of blogging that prioritizes:
 
 Feel free to explore the blog posts and learn more about the topics I write about.
 
-Made with ʕ•ᴥ•ʔ using [Hugo](https://gohugo.io/) and [Bear Blog theme](https://github.com/janraasch/hugo-bearblog).
+Made with ʕ•ᴥ•ʔ using [Hugo](https://gohugo.io/) and [Bear Blog theme](https://github.com/janraasch/hugo-bearblog)
