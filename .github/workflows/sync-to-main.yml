@@ -6,6 +6,9 @@ on:
     branches:
       - claude/claude-md-mi6mmw2nw73ux1cy-01TMfysXMWSVJppY1fmV7Wpk
 
+permissions:
+  contents: write
+
 jobs:
   sync:
     runs-on: ubuntu-latest
