@@ -1,6 +1,6 @@
 +++
 title = "Hello World!"
-date = 2025-11-20
+date = 2025-11-19
 +++
 
 Hello World!
