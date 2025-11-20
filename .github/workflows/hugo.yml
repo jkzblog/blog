@@ -2,11 +2,10 @@
 name: Deploy Hugo site to Pages
 
 on:
-  # Runs on pushes targeting the default branch or claude branch
+  # Runs on pushes targeting the default branch
   push:
     branches:
       - main
-      - claude/claude-md-mi6mmw2nw73ux1cy-01TMfysXMWSVJppY1fmV7Wpk
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
