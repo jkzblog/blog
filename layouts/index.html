@@ -1,0 +1,18 @@
+{{ define "main" }}
+<header>
+  <h1>{{ .Site.Title }}</h1>
+</header>
+
+{{ $pages := where site.RegularPages "Type" "in" site.Params.mainSections }}
+{{ range $pages }}
+<article>
+  <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+  {{ if .Date }}
+  <p><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02 Jan, 2006" }}</time></p>
+  {{ end }}
+  {{ if .Description }}
+  <p>{{ .Description }}</p>
+  {{ end }}
+</article>
+{{ end }}
+{{ end }}
