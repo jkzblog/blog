@@ -19,11 +19,11 @@ disableKinds = ["taxonomy"]
 ignoreErrors = ["error-disable-taxonomy"]
 
 [permalinks]
-  blog = "/:slug/"
+  posts = "/:slug/"
 
 [params]
   # Show blog posts on home page
-  mainSections = ["blog"]
+  mainSections = ["posts"]
   # The "description" of your website. This is used in the meta data of your generated html.
   description = ""
 
